@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+
+{% block title %}
+  {{ post.location }}. {{ post.date }}
+{% endblock %}
+
+{% block content %}
+  {% include "includes/card.html" %}
+{% endblock %}
