@@ -149,4 +149,4 @@ dmypy.json
 media/
 
 # Данные
-blogicum/db.json
+db.json
