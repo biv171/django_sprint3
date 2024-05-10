@@ -1,35 +1,34 @@
 from django.db import models
 
-
 from django.contrib.auth import get_user_model
 
 
 User = get_user_model()
 
 
-class BaseModel(models.Model):
+class CommonFields(models.Model):
     is_published = models.BooleanField(
+        'Опубликовано',
         default=True,
-        verbose_name='Опубликовано',
         help_text='Снимите галочку, чтобы скрыть публикацию.'
     )
     created_at = models.DateTimeField(
-        auto_now_add=True,
-        verbose_name='Добавлено'
+        'Добавлено',
+        auto_now_add=True
     )
 
     class Meta:
         abstract = True
 
 
-class Category(BaseModel):
-    title = models.CharField(max_length=256, verbose_name='Заголовок')
-    description = models.TextField(verbose_name='Описание')
+class Category(CommonFields):
+    title = models.CharField('Заголовок', max_length=256)
+    description = models.TextField('Описание')
     slug = models.SlugField(
+        'Идентификатор',
         unique=True,
-        verbose_name='Идентификатор',
         help_text=('Идентификатор страницы для URL; разрешены символы'
-                   + ' латиницы, цифры, дефис и подчёркивание.')
+                   ' латиницы, цифры, дефис и подчёркивание.')
     )
 
     class Meta:
@@ -40,10 +39,10 @@ class Category(BaseModel):
         return self.title
 
 
-class Location(BaseModel):
+class Location(CommonFields):
     name = models.CharField(
-        max_length=256,
-        verbose_name='Название места'
+        'Название места',
+        max_length=256
     )
 
     class Meta:
@@ -54,13 +53,13 @@ class Location(BaseModel):
         return self.name
 
 
-class Post(BaseModel):
-    title = models.CharField(max_length=256, verbose_name='Заголовок')
-    text = models.TextField(verbose_name='Текст')
+class Post(CommonFields):
+    title = models.CharField('Заголовок', max_length=256)
+    text = models.TextField('Текст')
     pub_date = models.DateTimeField(
-        verbose_name='Дата и время публикации',
+        'Дата и время публикации',
         help_text=('Если установить дату и время в будущем'
-                   + ' — можно делать отложенные публикации.')
+                   ' — можно делать отложенные публикации.')
     )
     author = models.ForeignKey(
         User,
@@ -84,6 +83,7 @@ class Post(BaseModel):
     class Meta:
         verbose_name = 'публикация'
         verbose_name_plural = 'Публикации'
+        ordering = ('-id',)
 
     def __str__(self):
         return self.title
